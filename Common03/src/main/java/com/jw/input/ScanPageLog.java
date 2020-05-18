@@ -11,6 +11,15 @@ public class ScanPageLog {
     private String huodongId;
     private String miaoshahuodongId;
     private String tuangouId;
+    private String deviceType;
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
 
     public String getPageId() {
         return pageId;

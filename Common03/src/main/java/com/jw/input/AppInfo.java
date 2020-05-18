@@ -1,6 +1,6 @@
 package com.jw.input;
 
-public class AppInfo {
+public class AppInfo extends DeviceCommonInfo {
     private String appPlatform;
     private String deviceStyle;
     private String brand;

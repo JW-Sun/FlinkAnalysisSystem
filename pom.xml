@@ -16,6 +16,14 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -83,6 +91,7 @@
         <module>DataCollect01</module>
         <module>RegisterCenter02</module>
         <module>Common03</module>
+        <module>Analysis04</module>
     </modules>
 
 </project>

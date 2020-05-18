@@ -11,5 +11,12 @@
 
     <artifactId>Common03</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
+    </dependencies>
 
 </project>
