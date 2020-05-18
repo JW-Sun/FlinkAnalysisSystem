@@ -12,10 +12,10 @@ import java.net.URL;
 
 public class SendLogData {
     public static void main(String[] args) {
-        AppInfo appInfo = new AppInfo();
-        appInfo.setDeviceType("1");
-        String s = JSONObject.toJSONString(appInfo, SerializerFeature.WriteMapNullValue);
-        postHttpMethod("http://localhost:8090/dataCollect", s);
+        // AppInfo appInfo = new AppInfo();
+        // setDeviceType("1");
+        // String s = JSONObject.toJSONString(appInfo, SerializerFeature.WriteMapNullValue);
+        // postHttpMethod("http://localhost:8090/dataCollect", s);
     }
 
     private static void postHttpMethod(String urlpath, String data){

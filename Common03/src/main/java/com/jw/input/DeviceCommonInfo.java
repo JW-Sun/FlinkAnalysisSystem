@@ -6,7 +6,7 @@ public class DeviceCommonInfo {
     private String deviceId;
 
     // pc 小程序 app
-    private String deviceType;
+    // private String deviceType;
 
     private String openTime;
 
@@ -36,13 +36,6 @@ public class DeviceCommonInfo {
         this.deviceId = deviceId;
     }
 
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
 
     public String getOpenTime() {
         return openTime;

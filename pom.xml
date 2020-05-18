@@ -92,6 +92,7 @@
         <module>RegisterCenter02</module>
         <module>Common03</module>
         <module>Analysis04</module>
+        <module>ClickHouseTest05</module>
     </modules>
 
 </project>

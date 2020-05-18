@@ -9,6 +9,7 @@
         <module name="RegisterCenter02" />
         <module name="DataCollect01" />
         <module name="Common03" />
+        <module name="ClickHouseTest05" />
         <module name="Analysis04" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Analysis04" options="-parameters" />
+      <module name="ClickHouseTest05" options="-parameters" />
       <module name="Common03" options="-parameters" />
       <module name="DataCollect01" options="-parameters" />
       <module name="RegisterCenter02" options="-parameters" />

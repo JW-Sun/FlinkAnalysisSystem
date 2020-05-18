@@ -9,6 +9,7 @@ import com.jw.input.ScanPageLog;
 import com.jw.input.XiaoChengXuInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,19 +32,21 @@ public class DataCollectionController {
         if (StringUtils.isNotBlank(data)) {
             JSONObject jsonObject = JSON.parseObject(data);
             String deviceType = jsonObject.getString("deviceType");
-            // 0:pc 1：app  2:小程序端  3：网页浏览日志
+            ScanPageLog scanPageLog = JSON.parseObject(data, ScanPageLog.class);
+            String deviceCommonInfo = jsonObject.getString("deviceCommonInfo");
+            // 0:app 1：pc  2:小程序端
             if ("0".equals(deviceType)) {
+                System.out.println("app");
+                AppInfo appInfo = JSONObject.parseObject(deviceCommonInfo, AppInfo.class);
+                scanPageLog.setDeviceCommonInfo(appInfo);
+            } else if ("1".equals(deviceType)) {
                 System.out.println("pc");
                 PcInfo pcInfo = JSONObject.parseObject(data, PcInfo.class);
-            } else if ("1".equals(deviceType)) {
-                System.out.println("app");
-                AppInfo appInfo = JSONObject.parseObject(data, AppInfo.class);
+                scanPageLog.setDeviceCommonInfo(pcInfo);
             } else if ("2".equals(deviceType)) {
                 System.out.println("xiaochengxu");
                 XiaoChengXuInfo xiaoChengXuInfo = JSONObject.parseObject(data, XiaoChengXuInfo.class);
-            } else if ("4".equals(deviceType)) {
-                System.out.println("scanpage");
-                ScanPageLog scanPageLog = JSONObject.parseObject(data, ScanPageLog.class);
+                scanPageLog.setDeviceCommonInfo(xiaoChengXuInfo);
             }
             kafkaTemplate.send("dataInfo", data);
         }

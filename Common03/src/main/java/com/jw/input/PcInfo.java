@@ -35,15 +35,6 @@ public class PcInfo extends DeviceCommonInfo {
         this.remoteName = remoteName;
     }
 
-    @Override
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    @Override
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
 
     public String getOs() {
         return os;

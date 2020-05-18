@@ -11,7 +11,18 @@ public class ScanPageLog {
     private String huodongId;
     private String miaoshahuodongId;
     private String tuangouId;
+    // 0app 1pc 2xiaochengxu
     private String deviceType;
+
+    private DeviceCommonInfo deviceCommonInfo;
+
+    public DeviceCommonInfo getDeviceCommonInfo() {
+        return deviceCommonInfo;
+    }
+
+    public void setDeviceCommonInfo(DeviceCommonInfo deviceCommonInfo) {
+        this.deviceCommonInfo = deviceCommonInfo;
+    }
 
     public String getDeviceType() {
         return deviceType;

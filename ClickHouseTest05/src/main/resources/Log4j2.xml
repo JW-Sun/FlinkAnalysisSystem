@@ -1,0 +1,92 @@
+<xml version="1.0" encoding="UTF-8">
+
+    <Configuration status="WARN">
+
+
+
+        <!--全局参数-->
+
+        <Properties>
+
+            <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c{1}:%L - %m%n</Property>
+
+            <Property name="logDir">/data/logs/dust-server</Property>
+
+        </Properties>
+
+
+
+        <Loggers>
+
+            <Root level="INFO">
+
+                <AppenderRef ref="console"/>
+
+                <AppenderRef ref="rolling_file"/>
+
+            </Root>
+
+        </Loggers>
+
+
+
+        <Appenders>
+
+            <!-- 定义输出到控制台 -->
+
+            <Console name="console" target="SYSTEM_OUT" follow="true">
+
+                <!--控制台只输出level及以上级别的信息-->
+
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+
+                <PatternLayout>
+
+                    <Pattern>${pattern}</Pattern>
+
+                </PatternLayout>
+
+            </Console>
+
+            <!-- 同一来源的Appender可以定义多个RollingFile，定义按天存储日志 -->
+
+            <RollingFile name="rolling_file"
+
+                         fileName="${logDir}/dust-server.log"
+
+                         filePattern="${logDir}/dust-server_%d{yyyy-MM-dd}.log">
+
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+
+                <PatternLayout>
+
+                    <Pattern>${pattern}</Pattern>
+
+                </PatternLayout>
+
+                <Policies>
+
+                    <TimeBasedTriggeringPolicy interval="1"/>
+
+                </Policies>
+
+                <!-- 日志保留策略，配置只保留七天 -->
+
+                <DefaultRolloverStrategy>
+
+                    <Delete basePath="${logDir}/" maxDepth="1">
+
+                        <IfFileName glob="dust-server_*.log" />
+
+                        <IfLastModified age="7d" />
+
+                    </Delete>
+
+                </DefaultRolloverStrategy>
+
+            </RollingFile>
+
+        </Appenders>
+
+    </Configuration>
+</xml>
