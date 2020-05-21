@@ -20,6 +20,57 @@ public class DeviceCommonInfo {
 
     private String city;
 
+    // 是否是新增用户
+    private boolean isNew;
+    // 是否是小时活跃
+    private boolean hourActive;
+    // 是否是天活跃
+    private boolean dayActive;
+    // 是否是月活跃
+    private boolean monthActive;
+    // 是否是周活跃
+    private boolean weekActive;
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    public boolean isHourActive() {
+        return hourActive;
+    }
+
+    public void setHourActive(boolean hourActive) {
+        this.hourActive = hourActive;
+    }
+
+    public boolean isDayActive() {
+        return dayActive;
+    }
+
+    public void setDayActive(boolean dayActive) {
+        this.dayActive = dayActive;
+    }
+
+    public boolean isMonthActive() {
+        return monthActive;
+    }
+
+    public void setMonthActive(boolean monthActive) {
+        this.monthActive = monthActive;
+    }
+
+    public boolean isWeekActive() {
+        return weekActive;
+    }
+
+    public void setWeekActive(boolean weekActive) {
+        this.weekActive = weekActive;
+    }
+
     public String getUerId() {
         return uerId;
     }

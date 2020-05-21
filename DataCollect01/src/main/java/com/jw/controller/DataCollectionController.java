@@ -48,7 +48,8 @@ public class DataCollectionController {
                 XiaoChengXuInfo xiaoChengXuInfo = JSONObject.parseObject(data, XiaoChengXuInfo.class);
                 scanPageLog.setDeviceCommonInfo(xiaoChengXuInfo);
             }
-            kafkaTemplate.send("dataInfo", data);
+            String scanPageLogString = JSON.toJSONString(scanPageLog);
+            kafkaTemplate.send("dataInfo", scanPageLogString);
         }
 
     }
