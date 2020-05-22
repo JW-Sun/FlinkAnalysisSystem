@@ -3,6 +3,7 @@ package com.jw.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.jw.dataCollectionUtils.UserStatus;
 import com.jw.input.AppInfo;
 import com.jw.input.PcInfo;
 import com.jw.input.ScanPageLog;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 /***
  * 数据收集服务
  */
@@ -27,7 +30,7 @@ public class DataCollectionController {
 
 
     @PostMapping("/dataCollect")
-    public void dataCollect(@RequestBody String data) {
+    public void dataCollect(@RequestBody String data) throws IOException {
         System.out.println(data);
         if (StringUtils.isNotBlank(data)) {
             JSONObject jsonObject = JSON.parseObject(data);
@@ -38,17 +41,30 @@ public class DataCollectionController {
             if ("0".equals(deviceType)) {
                 System.out.println("app");
                 AppInfo appInfo = JSONObject.parseObject(deviceCommonInfo, AppInfo.class);
+
+                UserStatus.filterNewStatus(appInfo);
+                UserStatus.filterActiveStatus(appInfo);
+
                 scanPageLog.setDeviceCommonInfo(appInfo);
             } else if ("1".equals(deviceType)) {
                 System.out.println("pc");
                 PcInfo pcInfo = JSONObject.parseObject(data, PcInfo.class);
+
+                UserStatus.filterNewStatus(pcInfo);
+                UserStatus.filterActiveStatus(pcInfo);
+
                 scanPageLog.setDeviceCommonInfo(pcInfo);
             } else if ("2".equals(deviceType)) {
                 System.out.println("xiaochengxu");
                 XiaoChengXuInfo xiaoChengXuInfo = JSONObject.parseObject(data, XiaoChengXuInfo.class);
+
+                UserStatus.filterNewStatus(xiaoChengXuInfo);
+                UserStatus.filterActiveStatus(xiaoChengXuInfo);
+
                 scanPageLog.setDeviceCommonInfo(xiaoChengXuInfo);
             }
             String scanPageLogString = JSON.toJSONString(scanPageLog);
+            System.out.println(scanPageLogString);
             kafkaTemplate.send("dataInfo", scanPageLogString);
         }
 

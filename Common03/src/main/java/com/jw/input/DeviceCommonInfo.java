@@ -1,8 +1,10 @@
 package com.jw.input;
 
 public class DeviceCommonInfo {
+    // 未登录为用户为-1
     private String uerId;
 
+    //设备Id
     private String deviceId;
 
     // pc 小程序 app
@@ -22,6 +24,8 @@ public class DeviceCommonInfo {
 
     // 是否是新增用户
     private boolean isNew;
+    // 是否5分钟活跃
+    private boolean fiveMinuteActive;
     // 是否是小时活跃
     private boolean hourActive;
     // 是否是天活跃
@@ -30,6 +34,15 @@ public class DeviceCommonInfo {
     private boolean monthActive;
     // 是否是周活跃
     private boolean weekActive;
+
+
+    public boolean isFiveMinuteActive() {
+        return fiveMinuteActive;
+    }
+
+    public void setFiveMinuteActive(boolean fiveMinuteActive) {
+        this.fiveMinuteActive = fiveMinuteActive;
+    }
 
     public boolean isNew() {
         return isNew;
