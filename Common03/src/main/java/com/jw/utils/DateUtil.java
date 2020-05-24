@@ -130,13 +130,31 @@ public class DateUtil {
         return hour;
     }
 
+    public static String getByMillions(String timeInfo, String format) {
+        DateFormat dateFormatHour = new SimpleDateFormat(format);
+        Long timeMillion = Long.valueOf(timeInfo);
+        Date date = new Date(timeMillion);
+        String hour = dateFormatHour.format(date);
+        return hour;
+    }
+
+
     public static void main(String[] args) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd HHmmss");
         Date date = dateFormat.parse("20200412 123223");
-        String byInterMinute = getByInterMinute(date.getTime() + "");
+        /*String byInterMinute = getByInterMinute(date.getTime() + "");
         System.out.println(byInterMinute);
 
         String byInterHour = getByInterHour(date.getTime() + "");
-        System.out.println(byInterHour);
+        System.out.println(byInterHour);*/
+
+        long time = date.getTime();
+        System.out.println(time);
+
+        Date date1 = dateFormat.parse("20210612 153223");
+
+
+        long time1 = date1.getTime();
+        System.out.println(time1);
     }
 }

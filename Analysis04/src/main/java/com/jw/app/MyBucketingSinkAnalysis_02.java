@@ -22,7 +22,7 @@ import org.apache.hadoop.fs.Path;
 
 import java.util.Properties;
 
-public class BucketingSinkAnalysis {
+public class MyBucketingSinkAnalysis_02 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -42,13 +42,13 @@ public class BucketingSinkAnalysis {
 
         env.enableCheckpointing(5000);
 
-        BucketingSink<String> sink = new BucketingSink<>("F:\\test");
-        sink.setBucketer(new DateTimeBucketer());
+        BucketingSink<String> sink = new BucketingSink<String>("F:\\test");
+        sink.setBucketer(new MyPathBucket());
         sink.setWriter(new StringWriter());
-        sink.setBatchRolloverInterval(1 * 1000);
+        sink.setBatchRolloverInterval(5 * 1000);
 
         source.addSink(sink);
 
-        env.execute("BucketingSinkAnalysis");
+        env.execute("MyBucketingSinkAnalysis_02");
     }
 }

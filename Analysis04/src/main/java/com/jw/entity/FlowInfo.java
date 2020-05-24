@@ -16,6 +16,16 @@ public class FlowInfo {
     private Long monthActiveNums = 0L; // 月活跃数量
     private Long userNums = 0L; // 用户数量
 
+    private String userId; // 用户id
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public Long getUserNums() {
         return userNums;
