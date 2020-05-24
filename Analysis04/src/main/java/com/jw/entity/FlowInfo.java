@@ -1,20 +1,29 @@
 package com.jw.entity;
 
-public class FlowMinuteInfo {
+public class FlowInfo {
     private String timeInfo; // 分钟
     private Long times = 0L; // 访问次数
     private String deviceType; // 终端类型
     private String groupByField; // 分组字段
     private Long newUserNum = 0L; // 新增用户的数量
 
-    public FlowMinuteInfo() {
+    public FlowInfo() {
     }
 
     private Long hourActiveNums = 0L; // 小时活跃数量
     private Long dayActiveNums = 0L; // 天活跃数量
     private Long weekActiveNums = 0L; // 周活跃数量
     private Long monthActiveNums = 0L; // 月活跃数量
+    private Long userNums = 0L; // 用户数量
 
+
+    public Long getUserNums() {
+        return userNums;
+    }
+
+    public void setUserNums(Long userNums) {
+        this.userNums = userNums;
+    }
 
     public Long getHourActiveNums() {
         return hourActiveNums;

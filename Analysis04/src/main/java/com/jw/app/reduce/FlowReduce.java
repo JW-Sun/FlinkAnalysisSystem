@@ -1,11 +1,11 @@
 package com.jw.app.reduce;
 
-import com.jw.entity.FlowMinuteInfo;
+import com.jw.entity.FlowInfo;
 import org.apache.flink.api.common.functions.ReduceFunction;
 
-public class FlowMinuteReduce implements ReduceFunction<FlowMinuteInfo> {
+public class FlowReduce implements ReduceFunction<FlowInfo> {
     @Override
-    public FlowMinuteInfo reduce(FlowMinuteInfo value1, FlowMinuteInfo value2) throws Exception {
+    public FlowInfo reduce(FlowInfo value1, FlowInfo value2) throws Exception {
         Long times = value1.getTimes();
         Long times1 = value2.getTimes();
 
@@ -29,7 +29,11 @@ public class FlowMinuteReduce implements ReduceFunction<FlowMinuteInfo> {
         Long monthActiveNums1 = value1.getMonthActiveNums();
         Long monthActiveNums2 = value2.getMonthActiveNums();
 
-        FlowMinuteInfo res = new FlowMinuteInfo();
+        // 活跃用户的数量
+        Long userNums1 = value1.getUserNums();
+        Long userNums2 = value2.getUserNums();
+
+        FlowInfo res = new FlowInfo();
         res.setGroupByField(value1.getGroupByField());
         res.setTimes(times + times1);
         res.setDeviceType(value1.getDeviceType());
@@ -40,6 +44,8 @@ public class FlowMinuteReduce implements ReduceFunction<FlowMinuteInfo> {
         res.setDayActiveNums(dayActiveNums1 + dayActiveNums2);
         res.setWeekActiveNums(weekActiveNums1 + weekActiveNums2);
         res.setMonthActiveNums(monthActiveNums1 + monthActiveNums2);
+
+        res.setUserNums(userNums1 + userNums2);
 
         return res;
     }

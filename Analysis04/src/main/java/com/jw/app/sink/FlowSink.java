@@ -1,16 +1,16 @@
 package com.jw.app.sink;
 
-import com.jw.entity.FlowMinuteInfo;
+import com.jw.entity.FlowInfo;
 import com.jw.utils.ClickHouseUtil;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlowMinuteSink implements SinkFunction<FlowMinuteInfo> {
+public class FlowSink implements SinkFunction<FlowInfo> {
 
     @Override
-    public void invoke(FlowMinuteInfo in, Context context) throws Exception {
+    public void invoke(FlowInfo in, Context context) throws Exception {
         String timeInfo = in.getTimeInfo();
         String deviceType = in.getDeviceType();
         Long times = in.getTimes();
@@ -20,6 +20,8 @@ public class FlowMinuteSink implements SinkFunction<FlowMinuteInfo> {
         Long dayActiveNums = in.getDayActiveNums();
         Long weekActiveNums = in.getWeekActiveNums();
         Long monthActiveNums = in.getMonthActiveNums();
+
+        Long userNums = in.getUserNums();
 
 
         Map<String, String> map = new HashMap<>();
@@ -33,6 +35,8 @@ public class FlowMinuteSink implements SinkFunction<FlowMinuteInfo> {
         map.put("weekActiveNums", weekActiveNums + "");
         map.put("monthActiveNums", monthActiveNums + "");
 
-        ClickHouseUtil.insert("FlowMinuteInfo", map);
+        map.put("userNums", userNums + "");
+
+        ClickHouseUtil.insert("FlowInfo", map);
     }
 }

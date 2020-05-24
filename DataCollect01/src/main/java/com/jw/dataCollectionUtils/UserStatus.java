@@ -128,13 +128,11 @@ public class UserStatus {
                 }
 
                 // min
-                /*
-                Long currentFiveMinuteStart = DateUtil.getCurrentFiveMinuteStart(openTime);
-                if (last < currentFiveMinuteStart) {
+                //分钟
+                Long fiveMinuteInter = DateUtil.getCurrentFiveMinuteInterStart(openTime);
+                if (last < fiveMinuteInter) {
                     appInfo.setFiveMinuteActive(true);
                 }
-
-                 */
             }
             HBaseUtil.insert("deviceCommonInfoApp", deviceId, "info", "lastVisitTime", String.valueOf(openTime));
 
@@ -217,13 +215,11 @@ public class UserStatus {
                 }
 
                 // min
-                /*
-                Long currentFiveMinuteStart = DateUtil.getCurrentFiveMinuteStart(openTime);
-                if (last < currentFiveMinuteStart) {
+                //分钟
+                Long fiveMinuteInter = DateUtil.getCurrentFiveMinuteInterStart(openTime);
+                if (last < fiveMinuteInter) {
                     pcInfo.setFiveMinuteActive(true);
                 }
-
-                 */
             }
 
 
@@ -274,11 +270,11 @@ public class UserStatus {
                 }
 
                 //分钟
-
-                /*long fiveMinuteIn = DateUtil.getCurrentFiveMinuteStart(openTimeMillons);
-                if(lastVisitTimeMillons < fiveMinuteIn) {
+                Long fiveMinuteInter = DateUtil.getCurrentFiveMinuteInterStart(openTimeMillons);
+                if (lastVisitTimeMillons < fiveMinuteInter) {
                     xiaochengxuInfo.setFiveMinuteActive(true);
-                }*/
+                }
+
             }
 
         }
