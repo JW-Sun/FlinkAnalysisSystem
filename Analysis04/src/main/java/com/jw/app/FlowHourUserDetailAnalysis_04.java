@@ -10,6 +10,7 @@ import com.jw.app.reduce.FlowUserDetailReduce;
 import com.jw.app.sink.FlowSink;
 import com.jw.entity.FlowInfo;
 import com.jw.utils.DateUtil;
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -58,17 +59,25 @@ public class FlowHourUserDetailAnalysis_04 {
                         return value.getGroupByField();
                     }
                 })
-                .timeWindow(Time.hours(1L))
+                .timeWindow(Time.seconds(5L))
                 .reduce(new FlowUserDetailReduce());
+
+        /* 将FlowInfo转换为JSONString */
+        DataStream<String> flowInfoJsonString = reduce.map(new MapFunction<FlowInfo, String>() {
+            @Override
+            public String map(FlowInfo flowInfo) throws Exception {
+                return JSON.toJSONString(flowInfo);
+            }
+        });
 
         // TODO 这里可以需要进行更改，转换成JsonString
         final StreamingFileSink sink = StreamingFileSink
-                .forRowFormat(new Path("hdfs://192.168.159.102:9000/FlinkAnalysis/Flow"), new SimpleStringEncoder<String>("UTF-8"))
+                .forRowFormat(new Path("hdfs://192.168.159.102:9000/project/FlinkClickHouse/FlowAnalysis"), new SimpleStringEncoder<String>("UTF-8"))
                 .withBucketAssigner(new MyFlowUserDetailBucketAssigner())
-                .withBucketCheckInterval(60 * 60 * 1000L)
+                .withBucketCheckInterval(5 * 1000L)
                 .build();
 
-        reduce.addSink(sink);
+        flowInfoJsonString.addSink(sink);
 
         source.print();
 
@@ -87,6 +96,7 @@ class MyFlowUserDetailBucketAssigner implements BucketAssigner {
         String date = (String) jsonObject.get("timeInfo");
         // String format = DateUtil.getByMillions(date, "yyyyMMddHH");
         String res = date.substring(0, 8) + "/" + date.substring(8, 10);
+        System.out.println("BucketAssigner: " + res);
         return res;
     }
 
