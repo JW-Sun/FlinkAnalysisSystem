@@ -11,7 +11,7 @@ public class FlowUserDetailReduce implements ReduceFunction<FlowInfo> {
 
         // 新增用户
         Long newUserNum1 = value1.getNewUserNum();
-        Long newUserNum2 = value1.getNewUserNum();
+        Long newUserNum2 = value2.getNewUserNum();
 
         // 小时
         Long hourActiveNums1 = value1.getHourActiveNums();
