@@ -1,17 +1,20 @@
 package com.jw.app.reduce;
 
+import com.jw.entity.ChannelInfo;
 import com.jw.entity.FlowInfo;
 import org.apache.flink.api.common.functions.ReduceFunction;
 
-public class FlowReduce implements ReduceFunction<FlowInfo> {
+import java.nio.channels.Channel;
+
+public class ChannelUserDetailReduce implements ReduceFunction<ChannelInfo> {
     @Override
-    public FlowInfo reduce(FlowInfo value1, FlowInfo value2) throws Exception {
+    public ChannelInfo reduce(ChannelInfo value1, ChannelInfo value2) throws Exception {
         Long times = value1.getTimes();
         Long times1 = value2.getTimes();
 
         // 新增用户
         Long newUserNum1 = value1.getNewUserNum();
-        Long newUserNum2 = value1.getNewUserNum();
+        Long newUserNum2 = value2.getNewUserNum();
 
         // 小时
         Long hourActiveNums1 = value1.getHourActiveNums();
@@ -29,22 +32,22 @@ public class FlowReduce implements ReduceFunction<FlowInfo> {
         Long monthActiveNums1 = value1.getMonthActiveNums();
         Long monthActiveNums2 = value2.getMonthActiveNums();
 
-        // 活跃用户的数量
-        Long userNums1 = value1.getUserNums();
-        Long userNums2 = value2.getUserNums();
-
-        FlowInfo res = new FlowInfo();
+        ChannelInfo res = new ChannelInfo();
         res.setGroupByField(value1.getGroupByField());
         res.setTimes(times + times1);
         res.setDeviceType(value1.getDeviceType());
         res.setTimeInfo(value1.getTimeInfo());
         res.setNewUserNum(newUserNum1 + newUserNum2);
+
         res.setHourActiveNums(hourActiveNums1 + hourActiveNums2);
         res.setDayActiveNums(dayActiveNums1 + dayActiveNums2);
         res.setWeekActiveNums(weekActiveNums1 + weekActiveNums2);
         res.setMonthActiveNums(monthActiveNums1 + monthActiveNums2);
 
-        res.setUserNums(userNums1 + userNums2);
+        res.setUserId(value1.getUserId());
+        res.setDeviceType(value1.getDeviceType());
+
+        res.setChannelInfo(value1.getChannelInfo());
 
         return res;
     }

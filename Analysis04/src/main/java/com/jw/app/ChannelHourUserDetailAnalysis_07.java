@@ -2,8 +2,11 @@ package com.jw.app;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jw.app.map.ChannelUserDetailMap;
 import com.jw.app.map.FlowUserDetailMap;
+import com.jw.app.reduce.ChannelInfoReduce;
 import com.jw.app.reduce.FlowUserDetailReduce;
+import com.jw.entity.ChannelInfo;
 import com.jw.entity.FlowInfo;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
@@ -22,7 +25,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 import java.io.IOException;
 import java.util.Properties;
 
-public class FlowHourUserDetailAnalysis_04 {
+public class ChannelHourUserDetailAnalysis_07 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -42,35 +45,35 @@ public class FlowHourUserDetailAnalysis_04 {
 
         env.enableCheckpointing(5000);
 
-        DataStream<FlowInfo> map = source.map(new FlowUserDetailMap());
+        DataStream<ChannelInfo> map = source.map(new ChannelUserDetailMap());
 
         // 分组
-        DataStream<FlowInfo> reduce = map
-                .keyBy(new KeySelector<FlowInfo, String>() {
+        DataStream<ChannelInfo> reduce = map
+                .keyBy(new KeySelector<ChannelInfo, String>() {
                     @Override
-                    public String getKey(FlowInfo value) throws Exception {
+                    public String getKey(ChannelInfo value) throws Exception {
                         return value.getGroupByField();
                     }
                 })
-                .timeWindow(Time.seconds(5L))
-                .reduce(new FlowUserDetailReduce());
+                .timeWindow(Time.hours(1L))
+                .reduce(new ChannelInfoReduce());
 
         /* 将FlowInfo转换为JSONString */
-        DataStream<String> flowInfoJsonString = reduce.map(new MapFunction<FlowInfo, String>() {
+        DataStream<String> channelInfoJsonString = reduce.map(new MapFunction<ChannelInfo, String>() {
             @Override
-            public String map(FlowInfo flowInfo) throws Exception {
-                return JSON.toJSONString(flowInfo);
+            public String map(ChannelInfo value) throws Exception {
+                return JSON.toJSONString(value);
             }
         });
 
         // TODO 这里可以需要进行更改，转换成JsonString
         final StreamingFileSink sink = StreamingFileSink
-                .forRowFormat(new Path("hdfs://192.168.159.102:9000/project/FlinkClickHouse/FlowAnalysis"), new SimpleStringEncoder<String>("UTF-8"))
-                .withBucketAssigner(new MyFlowUserDetailBucketAssigner())
-                .withBucketCheckInterval(5 * 1000L)
+                .forRowFormat(new Path("hdfs://192.168.159.102:9000/project/FlinkClickHouse/ChannelAnalysis"), new SimpleStringEncoder<String>("UTF-8"))
+                .withBucketAssigner(new MyChannelUserDetailBucketAssigner())
+                .withBucketCheckInterval(60 * 60 * 1000L)
                 .build();
 
-        flowInfoJsonString.addSink(sink);
+        channelInfoJsonString.addSink(sink);
 
         source.print();
 
@@ -78,10 +81,10 @@ public class FlowHourUserDetailAnalysis_04 {
     }
 }
 
-class MyFlowUserDetailBucketAssigner implements BucketAssigner {
+class MyChannelUserDetailBucketAssigner implements BucketAssigner {
 
     @Override
-    public Object getBucketId(Object element, BucketAssigner.Context context) {
+    public Object getBucketId(Object element, Context context) {
         JSONObject jsonObject = JSON.parseObject(element.toString());
         if (jsonObject == null || !jsonObject.containsKey("timeInfo")) {
             return null;
@@ -95,11 +98,11 @@ class MyFlowUserDetailBucketAssigner implements BucketAssigner {
 
     @Override
     public SimpleVersionedSerializer getSerializer() {
-        return new MySerializationn();
+        return new MySerializationn_channel();
     }
 }
 
-class MySerializationn implements SimpleVersionedSerializer<String> {
+class MySerializationn_channel implements SimpleVersionedSerializer<String> {
 
     @Override
     public int getVersion() {

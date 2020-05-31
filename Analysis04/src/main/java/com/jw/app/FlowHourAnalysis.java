@@ -1,6 +1,6 @@
 package com.jw.app;
 
-import com.jw.app.map.FlowHourTransferMap;
+import com.jw.app.map.HourTransferMap;
 import com.jw.app.map.FlowMap;
 import com.jw.app.reduce.FlowReduce;
 import com.jw.app.sink.FlowSink;
@@ -9,7 +9,6 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
@@ -36,7 +35,7 @@ public class FlowHourAnalysis {
 
         env.enableCheckpointing(5000);
 
-        DataStream<String> transformMap = source.map(new FlowHourTransferMap());
+        DataStream<String> transformMap = source.map(new HourTransferMap());
 
         DataStream<FlowInfo> map = transformMap.map(new FlowMap());
 

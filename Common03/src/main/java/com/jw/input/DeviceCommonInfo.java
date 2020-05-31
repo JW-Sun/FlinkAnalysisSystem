@@ -35,6 +35,17 @@ public class DeviceCommonInfo {
     // 是否是周活跃
     private boolean weekActive;
 
+    // 渠道的信息
+    private String channelInfo;
+
+
+    public String getChannelInfo() {
+        return channelInfo;
+    }
+
+    public void setChannelInfo(String channelInfo) {
+        this.channelInfo = channelInfo;
+    }
 
     public boolean isFiveMinuteActive() {
         return fiveMinuteActive;

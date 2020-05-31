@@ -1,10 +1,11 @@
 package com.jw.app;
 
-import com.jw.app.map.FlowMap;
+import com.jw.app.map.ChannelInfoMap;
+import com.jw.app.map.HourTransferMap;
 import com.jw.app.map.MinuteTransferMap;
-import com.jw.app.reduce.FlowReduce;
-import com.jw.app.sink.FlowSink;
-import com.jw.entity.FlowInfo;
+import com.jw.app.reduce.ChannelInfoReduce;
+import com.jw.app.sink.ChannelInfoSink;
+import com.jw.entity.ChannelInfo;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -15,7 +16,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 
 import java.util.Properties;
 
-public class FlowMinuteAnalysis {
+public class ChannelHourAnalysis_06 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -35,24 +36,25 @@ public class FlowMinuteAnalysis {
 
         env.enableCheckpointing(5000);
 
-        DataStream<String> transformMap = source.map(new MinuteTransferMap());
-        DataStream<FlowInfo> map = transformMap.map(new FlowMap());
+        DataStream<String> transferMap = source.map(new HourTransferMap());
+
+        DataStream<ChannelInfo> map = transferMap.map(new ChannelInfoMap());
 
         // 分组
-        DataStream<FlowInfo> reduce = map
-                .keyBy(new KeySelector<FlowInfo, String>() {
+        DataStream<ChannelInfo> reduce = map
+                .keyBy(new KeySelector<ChannelInfo, String>() {
                     @Override
-                    public String getKey(FlowInfo value) throws Exception {
+                    public String getKey(ChannelInfo value) throws Exception {
                         return value.getGroupByField();
                     }
                 })
                 .timeWindow(Time.minutes(5))
-                .reduce(new FlowReduce());
+                .reduce(new ChannelInfoReduce());
 
-        reduce.addSink(new FlowSink());
+        reduce.addSink(new ChannelInfoSink());
 
         source.print();
 
-        env.execute("FlowMinuteAnalysis");
+        env.execute("ChannelHourAnalysis_06");
     }
 }
