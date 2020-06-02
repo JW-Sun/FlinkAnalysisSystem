@@ -23,6 +23,8 @@ public class ChannelInfoSink implements SinkFunction<ChannelInfo> {
         Long weekActiveNums = in.getWeekActiveNums();
         Long monthActiveNums = in.getMonthActiveNums();
 
+        Long userNums = in.getUserNums();
+
 
         Map<String, String> map = new HashMap<>();
         map.put("timeInfo", timeInfo);
@@ -35,6 +37,8 @@ public class ChannelInfoSink implements SinkFunction<ChannelInfo> {
         map.put("dayActiveNums", dayActiveNums + "");
         map.put("weekActiveNums", weekActiveNums + "");
         map.put("monthActiveNums", monthActiveNums + "");
+
+        map.put("userNums", userNums + "");
 
 
         ClickHouseUtil.insert("ChannelInfo", map);

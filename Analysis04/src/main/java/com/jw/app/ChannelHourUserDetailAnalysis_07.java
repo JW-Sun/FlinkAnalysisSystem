@@ -77,7 +77,7 @@ public class ChannelHourUserDetailAnalysis_07 {
 
         source.print();
 
-        env.execute("FlowHourUserDetailAnalysis_04");
+        env.execute("ChannelHourUserDetailAnalysis_07");
     }
 }
 

@@ -54,6 +54,8 @@ public class ChannelInfoReduce implements ReduceFunction<ChannelInfo> {
         res.setWeekActiveNums(weekActiveNums1 + weekActiveNums2);
         res.setMonthActiveNums(monthActiveNums1 + monthActiveNums2);
 
+        res.setUserNums(userNums1 + userNums2);
+
 
         return res;
     }

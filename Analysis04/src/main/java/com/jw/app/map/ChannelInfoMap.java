@@ -29,17 +29,26 @@ public class ChannelInfoMap implements MapFunction<String, ChannelInfo> {
         String visitTime = scanPageLog.getVisitTime();
 
         /* 封装输出数据的对象 */
+        ChannelInfo channelInfo = new ChannelInfo();
 
         String interTime = DateUtil.getByInterMinute(visitTime);
 
         String flag = jsonObject.getString("flag");
         if ("hour".equals(flag)) {
             interTime = DateUtil.getByInterHour(visitTime);
+            // 小时活跃状态
+            if (deviceCommonInfo.isHourActive()) {
+                channelInfo.setUserNums(1L);
+            }
         } else if ("minute".equals(flag)) {
             interTime = DateUtil.getByInterMinute(visitTime);
+            // 5分钟的活跃状态
+            if (deviceCommonInfo.isFiveMinuteActive()) {
+                channelInfo.setUserNums(1L);
+            }
         }
 
-        ChannelInfo channelInfo = new ChannelInfo();
+
         channelInfo.setChannelInfo(channelInfoString);
         // 先按分钟级进行
         channelInfo.setTimeInfo(interTime);
