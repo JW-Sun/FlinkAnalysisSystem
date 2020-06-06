@@ -60,16 +60,20 @@ public class HBaseUtil {
     public static void put(String tableName, String rowKey,
                            String familyColumnName, Map<String, Object> data) throws IOException {
         Table table = connection.getTable(TableName.valueOf(tableName));
-        byte[] rowKeyByte = Bytes.toBytes(rowKey);
-        Put put = new Put(rowKeyByte);
+        byte[] rowKeyByte = rowKey.getBytes();
+
         if (MapUtils.isNotEmpty(data)) {
             Set<Map.Entry<String, Object>> set = data.entrySet();
             for (Map.Entry<String, Object> entry : set) {
+                Put put = new Put(rowKeyByte);
+
                 String key = entry.getKey();
                 Object value = entry.getValue();
-                put.addColumn(Bytes.toBytes(familyColumnName), Bytes.toBytes(key), Bytes.toBytes(String.valueOf(value)));
+                put.addColumn(familyColumnName.getBytes(), key.getBytes(), String.valueOf(value).getBytes());
+
+                table.put(put);
             }
-            table.put(put);
+
             table.close();
             System.out.println("Put ok");
         }
@@ -114,6 +118,11 @@ public class HBaseUtil {
 //        String s = get("test_youfan", "1", "time", "col1");
 //        System.out.println(s);
 
-        insert("test_youfan", "3", "time", "col3", "333");
+        // insert("test_youfan", "3", "time", "col3", "333");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("col1", 1);
+        map.put("col2", 2);
+        put("flink-clickhouse-product", "1", "info", map);
     }
 }
