@@ -1,13 +1,14 @@
-package com.jw.app;
+package com.jw.app.advertising;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jw.app.map.AdvertisingUserDetailMap;
 import com.jw.app.map.ChannelUserDetailMap;
-import com.jw.app.map.FlowUserDetailMap;
 import com.jw.app.reduce.ChannelInfoReduce;
-import com.jw.app.reduce.FlowUserDetailReduce;
+import com.jw.app.reduce.advertising.AdvertisingInfoReduce;
+import com.jw.app.reduce.advertising.AdvertisingUserDetailReduce;
+import com.jw.entity.AdvertisingInfo;
 import com.jw.entity.ChannelInfo;
-import com.jw.entity.FlowInfo;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -16,6 +17,7 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.filesystem.BucketAssigner;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
@@ -25,7 +27,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 import java.io.IOException;
 import java.util.Properties;
 
-public class ChannelHourUserDetailAnalysis_07 {
+public class AdvertisingHourUserDetailAnalysis_10 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -45,23 +47,23 @@ public class ChannelHourUserDetailAnalysis_07 {
 
         env.enableCheckpointing(5000);
 
-        DataStream<ChannelInfo> map = source.map(new ChannelUserDetailMap());
+        DataStream<AdvertisingInfo> map = source.map(new AdvertisingUserDetailMap());
 
         // 分组
-        DataStream<ChannelInfo> reduce = map
-                .keyBy(new KeySelector<ChannelInfo, String>() {
+        DataStream<AdvertisingInfo> reduce = map
+                .keyBy(new KeySelector<AdvertisingInfo, String>() {
                     @Override
-                    public String getKey(ChannelInfo value) throws Exception {
-                        return value.getGroupByField();
+                    public String getKey(AdvertisingInfo value) throws Exception {
+                        return value.getGroupByFieldString();
                     }
                 })
                 .timeWindow(Time.hours(1L))
-                .reduce(new ChannelInfoReduce());
+                .reduce(new AdvertisingUserDetailReduce());
 
         /* 将FlowInfo转换为JSONString */
-        DataStream<String> channelInfoJsonString = reduce.map(new MapFunction<ChannelInfo, String>() {
+        DataStream<String> AdvertisingInfoJsonString = reduce.map(new MapFunction<AdvertisingInfo, String>() {
             @Override
-            public String map(ChannelInfo value) throws Exception {
+            public String map(AdvertisingInfo value) throws Exception {
                 return JSON.toJSONString(value);
             }
         });
@@ -73,7 +75,7 @@ public class ChannelHourUserDetailAnalysis_07 {
                 .withBucketCheckInterval(60 * 60 * 1000L)
                 .build();
 
-        channelInfoJsonString.addSink(sink);
+        AdvertisingInfoJsonString.addSink(sink);
 
         source.print();
 
