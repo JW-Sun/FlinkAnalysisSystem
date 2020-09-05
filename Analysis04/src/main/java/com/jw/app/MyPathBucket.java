@@ -3,15 +3,11 @@ package com.jw.app;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jw.utils.DateUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.flink.streaming.api.functions.sink.filesystem.bucketassigners.BasePathBucketAssigner;
 import org.apache.flink.streaming.connectors.fs.Clock;
 import org.apache.flink.streaming.connectors.fs.bucketing.BasePathBucketer;
 import org.apache.hadoop.fs.Path;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class MyPathBucket extends BasePathBucketer<String> {
 

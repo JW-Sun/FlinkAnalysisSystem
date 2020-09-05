@@ -22,7 +22,18 @@ public class AdvertisingInfo {
     private String productId = "";
 
     // 设备信息
-    private String deviceType;
+    private String deviceType = "";
+
+    // 成交的用户数
+    private Long userOrderNums = 0L;
+
+    public Long getUserOrderNums() {
+        return userOrderNums;
+    }
+
+    public void setUserOrderNums(Long userOrderNums) {
+        this.userOrderNums = userOrderNums;
+    }
 
     public String getDeviceType() {
         return deviceType;

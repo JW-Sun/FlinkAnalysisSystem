@@ -1,7 +1,6 @@
 package com.jw.app.map;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.jw.entity.FlowInfo;
 import com.jw.input.DeviceCommonInfo;
 import com.jw.input.ScanPageLog;

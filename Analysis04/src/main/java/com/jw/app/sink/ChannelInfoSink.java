@@ -1,7 +1,6 @@
 package com.jw.app.sink;
 
 import com.jw.entity.ChannelInfo;
-import com.jw.entity.FlowInfo;
 import com.jw.utils.ClickHouseUtil;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 

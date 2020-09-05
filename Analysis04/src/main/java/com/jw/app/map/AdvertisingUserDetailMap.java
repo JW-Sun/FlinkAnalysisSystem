@@ -2,7 +2,6 @@ package com.jw.app.map;
 
 import com.alibaba.fastjson.JSON;
 import com.jw.entity.AdvertisingInfo;
-import com.jw.entity.ChannelInfo;
 import com.jw.input.DeviceCommonInfo;
 import com.jw.input.ScanPageLog;
 import com.jw.utils.DateUtil;
